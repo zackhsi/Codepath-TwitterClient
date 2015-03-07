@@ -3,16 +3,30 @@ package com.codepath.apps.twitterclient;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
+    private Button btnLogin;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+        setupViews();
 	}
+
+    private void setupViews() {
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginToRest();
+            }
+        });
+    }
 
 
 	// Inflate the menu; this adds items to the action bar if it is present.
@@ -40,7 +54,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// Click handler method for the button used to start OAuth flow
 	// Uses the client to initiate OAuth authorization
 	// This should be tied to a button used to login
-	public void loginToRest(View view) {
+	public void loginToRest() {
 		getClient().connect();
 	}
 
