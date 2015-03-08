@@ -3,5 +3,9 @@
 
     <string name="app_name">Twitter</string>
     <string name="login_label">Connect to Twitter </string>
+    <string name="title_activity_timeline">TimelineActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
