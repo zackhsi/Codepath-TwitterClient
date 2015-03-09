@@ -64,7 +64,7 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-                startActivity(i);
+                startActivityForResult(i, ComposeActivity.COMPOSE_REQUEST_CODE);
             }
         });
     }
@@ -92,6 +92,15 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ComposeActivity.COMPOSE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Tweet tweet = (Tweet) data.getSerializableExtra("tweet");
+                aTweets.insert(tweet, 0);
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

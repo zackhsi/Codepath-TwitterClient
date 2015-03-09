@@ -3,6 +3,7 @@ package com.codepath.apps.twitterclient.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Locale;
 /**
  * Created by zackhsi on 3/8/15.
  */
-public class Tweet {
+public class Tweet implements Serializable {
     private Double id;
     private Date createdAt;
     private String text;

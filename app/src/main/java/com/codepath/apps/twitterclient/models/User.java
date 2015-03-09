@@ -3,10 +3,12 @@ package com.codepath.apps.twitterclient.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by zackhsi on 3/8/15.
  */
-public class User {
+public class User implements Serializable {
     private String name;
     private String profileImageURL;
 
