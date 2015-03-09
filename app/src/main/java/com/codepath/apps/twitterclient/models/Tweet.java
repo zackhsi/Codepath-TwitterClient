@@ -12,10 +12,15 @@ import java.util.Locale;
  * Created by zackhsi on 3/8/15.
  */
 public class Tweet {
+    private Double id;
     private Date createdAt;
     private String text;
 
     private User user;
+
+    public Double getId() {
+        return id;
+    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -32,6 +37,7 @@ public class Tweet {
     public static Tweet fromJSON(JSONObject json) {
         Tweet tweet = new Tweet();
         try {
+            tweet.id = json.getDouble("id");
             SimpleDateFormat format = new SimpleDateFormat("EEE LLL dd HH:mm:ss Z yyyy", Locale.ENGLISH);
             tweet.createdAt = format.parse(json.getString("created_at"));  // Wed Mar 03 19:37:35 +0000 2010
             tweet.text = json.getString("text");

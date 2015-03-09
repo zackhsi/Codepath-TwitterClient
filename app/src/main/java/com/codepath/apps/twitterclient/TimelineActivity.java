@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
+import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -25,6 +26,7 @@ public class TimelineActivity extends ActionBarActivity {
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
+    private Double maxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +45,17 @@ public class TimelineActivity extends ActionBarActivity {
 
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
+
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                populateTimeline();
+            }
+        });
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getHomeTimeline(this.maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
@@ -54,6 +63,7 @@ public class TimelineActivity extends ActionBarActivity {
                     try {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
                         aTweets.add(tweet);
+                        maxId = tweet.getId();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
