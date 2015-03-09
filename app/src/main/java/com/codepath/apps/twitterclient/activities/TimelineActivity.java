@@ -1,6 +1,9 @@
 package com.codepath.apps.twitterclient.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +52,9 @@ public class TimelineActivity extends ActionBarActivity {
     private void setupViews() {
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, this.tweets);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#469AEA")));
+        getSupportActionBar().setTitle("Timeline");
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

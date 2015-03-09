@@ -3,4 +3,5 @@
     <color name="primary">#469AEA</color>
     <color name="primary_pressed">#267ACA</color>
     <color name="ripple">#065AAA</color>
+    <color name="black">#000</color>
 </resources>

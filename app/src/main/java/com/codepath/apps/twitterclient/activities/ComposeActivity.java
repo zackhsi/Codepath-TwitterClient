@@ -1,6 +1,8 @@
 package com.codepath.apps.twitterclient.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +42,9 @@ public class ComposeActivity extends ActionBarActivity {
     private void setupViews() {
         etTweet = (EditText) findViewById(R.id.etTweet);
         miTweet = (MenuItem) findViewById(R.id.miTweet);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#469AEA")));
+        getSupportActionBar().setTitle("Compose");
     }
 
 
