@@ -14,6 +14,18 @@ public class Tweet {
 
     private User user;
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     public static Tweet fromJSON(JSONObject json) {
         Tweet tweet = new Tweet();
         try {

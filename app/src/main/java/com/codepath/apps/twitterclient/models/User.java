@@ -10,6 +10,14 @@ public class User {
     private String name;
     private String profileImageURL;
 
+    public String getName() {
+        return name;
+    }
+
+    public String getProfileImageURL() {
+        return profileImageURL;
+    }
+
     public static User fromJSON(JSONObject json) {
         User user = new User();
         try {
