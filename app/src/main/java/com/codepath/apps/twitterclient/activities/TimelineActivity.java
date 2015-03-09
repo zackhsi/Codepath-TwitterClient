@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
@@ -32,6 +33,7 @@ public class TimelineActivity extends ActionBarActivity {
     private ListView lvTweets;
     private Double maxId;
     private FloatingActionButton fab;
+    private int lastKnownFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,15 @@ public class TimelineActivity extends ActionBarActivity {
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, this.tweets);
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+                startActivityForResult(i, ComposeActivity.COMPOSE_REQUEST_CODE);
+            }
+        });
+
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         lvTweets.setAdapter(aTweets);
 
@@ -56,16 +67,19 @@ public class TimelineActivity extends ActionBarActivity {
             public void onLoadMore(int page, int totalItemsCount) {
                 populateTimeline();
             }
-        });
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.attachToListView(lvTweets);
-        fab.setOnClickListener(new View.OnClickListener() {
+            // https://github.com/makovkastar/FloatingActionButton/issues/99
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-                startActivityForResult(i, ComposeActivity.COMPOSE_REQUEST_CODE);
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                if (firstVisibleItem > lastKnownFirst) {
+                    fab.hide(true);
+                } else if (firstVisibleItem < lastKnownFirst) {
+                    fab.show(true);
+                }
+                lastKnownFirst = firstVisibleItem;
             }
+
         });
     }
 
