@@ -21,6 +21,7 @@ import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.melnykov.fab.FloatingActionButton;
+import com.yalantis.pulltorefresh.library.PullToRefreshView;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -37,6 +38,7 @@ public class TimelineActivity extends ActionBarActivity {
     private Double maxId;
     private FloatingActionButton fab;
     private int lastKnownFirst;
+    private PullToRefreshView pullToRefreshView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,22 @@ public class TimelineActivity extends ActionBarActivity {
                 lastKnownFirst = firstVisibleItem;
             }
 
+        });
+
+        pullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        pullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                aTweets.clear();
+                maxId = null;
+                populateTimeline();
+                pullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pullToRefreshView.setRefreshing(false);
+                    }
+                }, 1);
+            }
         });
     }
 

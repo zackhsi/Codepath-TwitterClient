@@ -35,4 +35,5 @@ dependencies {
 
     compile 'com.melnykov:floatingactionbutton:1.2.0'
     compile 'de.hdodenhof:circleimageview:1.2.2'
+    compile 'com.yalantis:pulltorefresh:1.0.0'
 }
