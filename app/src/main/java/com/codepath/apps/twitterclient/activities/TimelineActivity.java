@@ -1,13 +1,17 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterclient.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.TwitterApplication;
+import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
@@ -17,7 +21,6 @@ import com.melnykov.fab.FloatingActionButton;
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -57,6 +60,13 @@ public class TimelineActivity extends ActionBarActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToListView(lvTweets);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void populateTimeline() {
