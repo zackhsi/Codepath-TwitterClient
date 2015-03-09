@@ -12,6 +12,7 @@ import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.melnykov.fab.FloatingActionButton;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -27,6 +28,7 @@ public class TimelineActivity extends ActionBarActivity {
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
     private Double maxId;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,9 @@ public class TimelineActivity extends ActionBarActivity {
                 populateTimeline();
             }
         });
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.attachToListView(lvTweets);
     }
 
     private void populateTimeline() {
@@ -91,11 +96,6 @@ public class TimelineActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
