@@ -116,7 +116,7 @@ public class TimelineActivity extends ActionBarActivity {
                     try {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
                         aTweets.add(tweet);
-                        maxId = tweet.getId();
+                        maxId = tweet.getTwitterId();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
