@@ -1,5 +1,8 @@
 package com.codepath.apps.twitterclient.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,9 +11,17 @@ import java.io.Serializable;
 /**
  * Created by zackhsi on 3/8/15.
  */
-public class User implements Serializable {
+public class User extends Model implements Serializable {
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "profileImageURL")
     private String profileImageURL;
+
+    public User(){
+        super();
+    }
 
     public String getName() {
         return name;
