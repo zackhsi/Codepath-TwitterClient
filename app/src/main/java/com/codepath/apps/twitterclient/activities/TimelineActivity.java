@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TimelineActivity extends ActionBarActivity {
 
@@ -35,7 +37,6 @@ public class TimelineActivity extends ActionBarActivity {
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
-    private Double maxId;
     private FloatingActionButton fab;
     private int lastKnownFirst;
     private PullToRefreshView pullToRefreshView;
@@ -52,7 +53,7 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     private void setupViews() {
-        tweets = new ArrayList<>();
+        this.tweets = new ArrayList<>(Tweet.getAll());
         aTweets = new TweetsArrayAdapter(this, this.tweets);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#469AEA")));
@@ -95,7 +96,6 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onRefresh() {
                 aTweets.clear();
-                maxId = null;
                 populateTimeline();
                 pullToRefreshView.postDelayed(new Runnable() {
                     @Override
@@ -108,15 +108,16 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(this.maxId, new JsonHttpResponseHandler() {
+        client.getHomeTimeline(Tweet.getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
+                        tweet.getUser().save();
+                        tweet.save();
                         aTweets.add(tweet);
-                        maxId = tweet.getTwitterId();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
