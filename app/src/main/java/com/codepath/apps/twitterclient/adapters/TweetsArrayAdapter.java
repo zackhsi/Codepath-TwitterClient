@@ -37,12 +37,16 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView tvText = (TextView) convertView.findViewById(R.id.tvText);
         TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
 
-        tvUser.setText(tweet.getUser().getName());
+        if (tweet.getUser() != null) {
+            tvUser.setText(tweet.getUser().getName());
+        }
         tvText.setText(tweet.getText());
         tvCreatedAt.setText(this.getRelativeTime(tweet.getCreatedAt()));
 
         ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).into(ivProfileImage);
+        if (tweet.getUser() != null) {
+            Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).into(ivProfileImage);
+        }
 
         return convertView;
     }

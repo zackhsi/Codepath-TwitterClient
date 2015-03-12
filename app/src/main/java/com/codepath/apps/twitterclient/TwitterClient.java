@@ -6,6 +6,7 @@ import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
 
+import com.codepath.apps.twitterclient.fragments.TweetsListFragment;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -44,13 +45,21 @@ public class TwitterClient extends OAuthBaseClient {
 	 *    i.e client.post(apiUrl, params, handler);
 	 */
 
-    public void getHomeTimeline(Long maxId, AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
+
         params.put("count", 25);
-        if (maxId != null) {
-            params.put("max_id", new DecimalFormat("#").format(maxId - 1));
+        if (tweetId != null) {
+            if (option == TweetsListFragment.PopulateOption.POPULATE_BOTTOM) {
+                // To populate the bottom, we want older tweets with lower IDs.
+                params.put("max_id", new DecimalFormat("#").format(tweetId - 1));
+            } else if (option == TweetsListFragment.PopulateOption.POPULATE_TOP) {
+                // To populate the top, we want newer tweets with higher IDs.
+                params.put("since_id", new DecimalFormat("#").format(tweetId + 1));
+            }
         }
+
         getClient().get(apiUrl, params, handler);
     }
 

@@ -20,11 +20,17 @@ import com.melnykov.fab.FloatingActionButton;
 import com.yalantis.pulltorefresh.library.PullToRefreshView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zackhsi on 3/11/15.
  */
 public class TweetsListFragment extends Fragment {
+
+    public static enum PopulateOption {
+        POPULATE_TOP,
+        POPULATE_BOTTOM,
+    }
 
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
@@ -59,7 +65,7 @@ public class TweetsListFragment extends Fragment {
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeline();
+                populateTimeline(PopulateOption.POPULATE_BOTTOM);
             }
 
             // https://github.com/makovkastar/FloatingActionButton/issues/99
@@ -80,8 +86,7 @@ public class TweetsListFragment extends Fragment {
         pullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                aTweets.clear();
-                populateTimeline();
+                populateTimeline(PopulateOption.POPULATE_TOP);
                 pullToRefreshView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -93,7 +98,7 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
-    protected void populateTimeline() {}
+    protected void populateTimeline(PopulateOption option) {}
 
 
     @Override
@@ -106,7 +111,12 @@ public class TweetsListFragment extends Fragment {
         }
     }
 
-    public void add(Tweet tweet) {
-        aTweets.add(tweet);
+    public void add(List<Tweet> tweets) {
+        aTweets.addAll(tweets);
+    }
+
+    public void add(int index, List<Tweet> tweets) {
+        tweets.addAll(index, tweets);
+        aTweets.notifyDataSetChanged();
     }
 }
