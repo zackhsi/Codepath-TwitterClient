@@ -13,7 +13,6 @@ import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.activities.ComposeActivity;
-import com.codepath.apps.twitterclient.activities.TimelineActivity;
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
