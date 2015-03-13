@@ -12,6 +12,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.List;
+
 /**
  * Created by zackhsi on 3/11/15.
  */
@@ -22,23 +24,22 @@ public class HomeTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        populateTimeline();
+        populateTimeline(PopulateOption.POPULATE_TOP);
     }
 
-    protected void populateTimeline() {
-        client.getHomeTimeline(Tweet.getMaxId(), new JsonHttpResponseHandler() {
+    protected void populateTimeline(final PopulateOption option) {
+        Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? Tweet.getMinId() : Tweet.getMaxId();
+
+        client.getHomeTimeline(option, tweetId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
-                        tweet.getUser().save();
-                        tweet.save();
-                        add(tweet);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                List<Tweet> tweets = Tweet.fromJSONArray(response);
+                if (option == PopulateOption.POPULATE_TOP) {
+                    add(0, tweets);
+                } else if (option == PopulateOption.POPULATE_BOTTOM) {
+                    add(tweets);
                 }
             }
 

@@ -5,12 +5,14 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -64,17 +66,32 @@ public class Tweet extends Model implements Serializable {
         return user;
     }
 
-    public static Tweet fromJSON(JSONObject json) {
+    public static Tweet fromJSON(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
         try {
-            tweet.twitterId = json.getLong("id");
-            tweet.setCreatedAtFromString(json.getString("created_at"));
-            tweet.text = json.getString("text");
-            tweet.user = User.fromJSON(json.getJSONObject("user"));
+            tweet.twitterId = jsonObject.getLong("id");
+            tweet.setCreatedAtFromString(jsonObject.getString("created_at"));
+            tweet.text = jsonObject.getString("text");
+            tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        tweet.save();
         return tweet;
+    }
+
+    public static List<Tweet> fromJSONArray(JSONArray jsonArray) {
+
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                Tweet tweet = Tweet.fromJSON(jsonArray.getJSONObject(i));
+                tweets.add(tweet);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return tweets;
     }
 
     public static List<Tweet> getAll() {
@@ -83,10 +100,21 @@ public class Tweet extends Model implements Serializable {
                 .execute();
     }
 
-    public static Long getMaxId() {
+    public static Long getMinId() {
         Tweet tweet = new Select()
                 .from(Tweet.class)
                 .orderBy("twitterId ASC")
+                .executeSingle();
+        if (tweet == null) {
+            return null;
+        }
+        return tweet.getTwitterId();
+    }
+
+    public static Long getMaxId() {
+        Tweet tweet = new Select()
+                .from(Tweet.class)
+                .orderBy("twitterId DESC")
                 .executeSingle();
         if (tweet == null) {
             return null;

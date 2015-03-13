@@ -39,6 +39,7 @@ public class User extends Model implements Serializable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        user.save();
         return user;
     }
 }
