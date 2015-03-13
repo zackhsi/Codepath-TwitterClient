@@ -9,6 +9,7 @@ import android.content.Context;
 import com.codepath.apps.twitterclient.fragments.TweetsListFragment;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.text.DecimalFormat;
@@ -63,10 +64,29 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
+    public void getMentionsTimeline(TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        RequestParams params = new RequestParams();
+
+        params.put("count", 25);
+        if (tweetId != null) {
+            if (option == TweetsListFragment.PopulateOption.POPULATE_BOTTOM) {
+                // To populate the bottom, we want older tweets with lower IDs.
+                params.put("max_id", new DecimalFormat("#").format(tweetId - 1));
+            } else if (option == TweetsListFragment.PopulateOption.POPULATE_TOP) {
+                // To populate the top, we want newer tweets with higher IDs.
+                params.put("since_id", new DecimalFormat("#").format(tweetId + 1));
+            }
+        }
+
+        getClient().get(apiUrl, params, handler);
+    }
+
     public void postTweet(String tweet, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", tweet);
         getClient().post(apiUrl, params, handler);
     }
+
 }

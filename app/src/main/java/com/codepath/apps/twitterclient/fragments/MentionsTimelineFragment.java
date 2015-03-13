@@ -11,7 +11,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 /**
  * Created by zackhsi on 3/11/15.
  */
-public class HomeTimelineFragment extends TweetsListFragment {
+public class MentionsTimelineFragment extends TweetsListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,19 +26,19 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
     protected void initializeData() {
-        tweets = new ArrayList<>(Tweet.getHome());
+        tweets = new ArrayList<>(Tweet.getMentions());
         aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
     }
 
     protected void populateTimeline(final PopulateOption option) {
         Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? Tweet.getMinId() : Tweet.getMaxId();
 
-        client.getHomeTimeline(option, tweetId, new JsonHttpResponseHandler() {
+        client.getMentionsTimeline(option, tweetId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
 
-                List<Tweet> tweets = Tweet.fromJSONArray(response, false);
+                List<Tweet> tweets = Tweet.fromJSONArray(response, true);
                 if (option == PopulateOption.POPULATE_TOP) {
                     addAll(0, tweets);
                 } else if (option == PopulateOption.POPULATE_BOTTOM) {

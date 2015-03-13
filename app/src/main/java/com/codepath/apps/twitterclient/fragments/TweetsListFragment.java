@@ -12,6 +12,8 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.TwitterApplication;
+import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.activities.ComposeActivity;
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
@@ -32,8 +34,10 @@ public class TweetsListFragment extends Fragment {
         POPULATE_BOTTOM,
     }
 
-    private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter aTweets;
+    protected ArrayList<Tweet> tweets;
+    protected TweetsArrayAdapter aTweets;
+    protected TwitterClient client;
+
     private ListView lvTweets;
     private FloatingActionButton fab;
     private int lastKnownFirst;
@@ -43,8 +47,12 @@ public class TweetsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.tweets = new ArrayList<>(Tweet.getAll());
-        aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
+        client = TwitterApplication.getRestClient();
+        initializeData();
+        populateTimeline(PopulateOption.POPULATE_BOTTOM);
+    }
+
+    protected void initializeData() {
     }
 
     @Override
@@ -111,11 +119,12 @@ public class TweetsListFragment extends Fragment {
         }
     }
 
-    public void add(List<Tweet> tweets) {
-        aTweets.addAll(tweets);
+    public void addAll(List<Tweet> tweets) {
+        tweets.addAll(tweets);
+        aTweets.notifyDataSetChanged();
     }
 
-    public void add(int index, List<Tweet> tweets) {
+    public void addAll(int index, List<Tweet> tweets) {
         tweets.addAll(index, tweets);
         aTweets.notifyDataSetChanged();
     }

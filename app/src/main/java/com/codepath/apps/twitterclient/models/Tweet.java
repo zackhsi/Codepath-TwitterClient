@@ -24,7 +24,7 @@ import java.util.Locale;
 @Table(name = "Tweets")
 public class Tweet extends Model implements Serializable {
 
-    @Column(name = "twitterId", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "twitterId")
     private Long twitterId;
 
     @Column(name = "createdAt")
@@ -35,6 +35,9 @@ public class Tweet extends Model implements Serializable {
 
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
+
+    @Column(name = "isMention")
+    private Boolean isMention;
 
     public Tweet() {
         super();
@@ -66,13 +69,14 @@ public class Tweet extends Model implements Serializable {
         return user;
     }
 
-    public static Tweet fromJSON(JSONObject jsonObject) {
+    public static Tweet fromJSON(JSONObject jsonObject, Boolean isMention) {
         Tweet tweet = new Tweet();
         try {
             tweet.twitterId = jsonObject.getLong("id");
             tweet.setCreatedAtFromString(jsonObject.getString("created_at"));
             tweet.text = jsonObject.getString("text");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.isMention = isMention;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -80,12 +84,12 @@ public class Tweet extends Model implements Serializable {
         return tweet;
     }
 
-    public static List<Tweet> fromJSONArray(JSONArray jsonArray) {
+    public static List<Tweet> fromJSONArray(JSONArray jsonArray, Boolean isMention) {
 
         ArrayList<Tweet> tweets = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                Tweet tweet = Tweet.fromJSON(jsonArray.getJSONObject(i));
+                Tweet tweet = Tweet.fromJSON(jsonArray.getJSONObject(i), isMention);
                 tweets.add(tweet);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -94,9 +98,19 @@ public class Tweet extends Model implements Serializable {
         return tweets;
     }
 
-    public static List<Tweet> getAll() {
+    public static List<Tweet> getHome() {
         return new Select()
                 .from(Tweet.class)
+                .where("isMention = ?", false)
+                .orderBy("twitterId DESC")
+                .execute();
+    }
+
+    public static List<Tweet> getMentions() {
+        return new Select()
+                .from(Tweet.class)
+                .where("isMention = ?", true)
+                .orderBy("twitterId DESC")
                 .execute();
     }
 
