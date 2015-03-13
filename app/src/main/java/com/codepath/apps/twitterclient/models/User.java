@@ -16,6 +16,9 @@ public class User extends Model implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "screenName")
+    private String screenName;
+
     @Column(name = "profileImageURL")
     private String profileImageURL;
 
@@ -27,6 +30,10 @@ public class User extends Model implements Serializable {
         return name;
     }
 
+    public String getScreenName() {
+        return screenName;
+    }
+
     public String getProfileImageURL() {
         return profileImageURL;
     }
@@ -36,6 +43,7 @@ public class User extends Model implements Serializable {
         try {
             user.name = json.getString("name");
             user.profileImageURL = json.getString("profile_image_url");
+            user.screenName = json.getString("screen_name");
         } catch (JSONException e) {
             e.printStackTrace();
         }

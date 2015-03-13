@@ -25,9 +25,8 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
     }
 
-    protected void initializeData() {
+    protected void refreshTweets() {
         tweets = new ArrayList<>(Tweet.getMentions());
-        aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
     }
 
     protected void populateTimeline(final PopulateOption option) {

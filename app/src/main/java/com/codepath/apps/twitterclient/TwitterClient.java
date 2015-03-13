@@ -82,11 +82,20 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+    public void getUserTimeline(String screenName, TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         RequestParams params = new RequestParams();
         params.put("screen_name", screenName);
         params.put("count", 25);
+        if (tweetId != null) {
+            if (option == TweetsListFragment.PopulateOption.POPULATE_BOTTOM) {
+                // To populate the bottom, we want older tweets with lower IDs.
+                params.put("max_id", new DecimalFormat("#").format(tweetId - 1));
+            } else if (option == TweetsListFragment.PopulateOption.POPULATE_TOP) {
+                // To populate the top, we want newer tweets with higher IDs.
+                params.put("since_id", new DecimalFormat("#").format(tweetId + 1));
+            }
+        }
         getClient().get(apiUrl, params, handler);
 
     }

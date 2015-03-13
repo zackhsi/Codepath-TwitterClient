@@ -48,11 +48,12 @@ public class TweetsListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        initializeData();
+        refreshTweets();
+        aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
         populateTimeline(PopulateOption.POPULATE_BOTTOM);
     }
 
-    protected void initializeData() {
+    protected void refreshTweets() {
     }
 
     @Override
@@ -121,11 +122,13 @@ public class TweetsListFragment extends Fragment {
 
     public void addAll(List<Tweet> tweets) {
         tweets.addAll(tweets);
+        refreshTweets();
         aTweets.notifyDataSetChanged();
     }
 
     public void addAll(int index, List<Tweet> tweets) {
         tweets.addAll(index, tweets);
+        refreshTweets();
         aTweets.notifyDataSetChanged();
     }
 }

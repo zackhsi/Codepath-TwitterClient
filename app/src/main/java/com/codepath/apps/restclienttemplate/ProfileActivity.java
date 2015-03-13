@@ -1,11 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.fragments.UserTimelineFragment;
 
 
 public class ProfileActivity extends ActionBarActivity {
@@ -14,6 +16,15 @@ public class ProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        if (savedInstanceState == null) {
+            String screenName = getIntent().getStringExtra("screenName");
+            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flContainer, fragmentUserTimeline);
+            ft.commit();
+        }
     }
 
 
