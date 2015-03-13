@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterclient.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.ViewParent;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.restclienttemplate.ProfileActivity;
 import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;
@@ -92,6 +94,7 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     public void onProfileView(MenuItem mi) {
-
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 }
