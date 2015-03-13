@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.codepath.apps.twitterclient.TwitterApplication;
 import com.codepath.apps.twitterclient.TwitterClient;
+import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -12,6 +13,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +27,11 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
         populateTimeline(PopulateOption.POPULATE_TOP);
+    }
+
+    protected void setupTweetsFeed() {
+        tweets = new ArrayList<>(Tweet.getHome());
+        aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
     }
 
     protected void populateTimeline(final PopulateOption option) {

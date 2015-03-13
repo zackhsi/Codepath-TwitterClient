@@ -94,9 +94,16 @@ public class Tweet extends Model implements Serializable {
         return tweets;
     }
 
-    public static List<Tweet> getAll() {
+    public static List<Tweet> getHome() {
         return new Select()
                 .from(Tweet.class)
+                .execute();
+    }
+
+    public static List<Tweet> getMentions() {
+        return new Select()
+                .from(Tweet.class)
+                .limit(1)
                 .execute();
     }
 

@@ -32,8 +32,9 @@ public class TweetsListFragment extends Fragment {
         POPULATE_BOTTOM,
     }
 
-    private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter aTweets;
+    protected ArrayList<Tweet> tweets;
+    protected TweetsArrayAdapter aTweets;
+
     private ListView lvTweets;
     private FloatingActionButton fab;
     private int lastKnownFirst;
@@ -43,8 +44,11 @@ public class TweetsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.tweets = new ArrayList<>(Tweet.getAll());
-        aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
+        setupTweetsFeed();
+    }
+
+    protected void setupTweetsFeed() {
+
     }
 
     @Override
