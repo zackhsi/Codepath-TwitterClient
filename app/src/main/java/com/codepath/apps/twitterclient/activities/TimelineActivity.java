@@ -64,7 +64,7 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
-        private String[] tabTitles = { "Home", "Mentions" };
+        private String[] tabTitles = {"Home", "Mentions"};
 
         public TweetsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -89,5 +89,9 @@ public class TimelineActivity extends ActionBarActivity {
         public int getCount() {
             return tabTitles.length;
         }
+    }
+
+    public void onProfileView(MenuItem mi) {
+
     }
 }
