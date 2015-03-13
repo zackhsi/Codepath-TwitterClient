@@ -19,16 +19,13 @@ import java.util.List;
  * Created by zackhsi on 3/11/15.
  */
 public class MentionsTimelineFragment extends TweetsListFragment {
-    private TwitterClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        client = TwitterApplication.getRestClient();
-        populateTimeline(PopulateOption.POPULATE_TOP);
     }
 
-    protected void setupTweetsFeed() {
+    protected void initializeData() {
         tweets = new ArrayList<>(Tweet.getMentions());
         aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
     }
@@ -43,9 +40,9 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
                 List<Tweet> tweets = Tweet.fromJSONArray(response, true);
                 if (option == PopulateOption.POPULATE_TOP) {
-                    add(0, tweets);
+                    addAll(0, tweets);
                 } else if (option == PopulateOption.POPULATE_BOTTOM) {
-                    add(tweets);
+                    addAll(tweets);
                 }
             }
 

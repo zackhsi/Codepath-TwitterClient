@@ -20,16 +20,13 @@ import java.util.List;
  * Created by zackhsi on 3/11/15.
  */
 public class HomeTimelineFragment extends TweetsListFragment {
-    private TwitterClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        client = TwitterApplication.getRestClient();
-        populateTimeline(PopulateOption.POPULATE_TOP);
     }
 
-    protected void setupTweetsFeed() {
+    protected void initializeData() {
         tweets = new ArrayList<>(Tweet.getHome());
         aTweets = new TweetsArrayAdapter(getActivity(), this.tweets);
     }
@@ -44,9 +41,9 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
                 List<Tweet> tweets = Tweet.fromJSONArray(response, false);
                 if (option == PopulateOption.POPULATE_TOP) {
-                    add(0, tweets);
+                    addAll(0, tweets);
                 } else if (option == PopulateOption.POPULATE_BOTTOM) {
-                    add(tweets);
+                    addAll(tweets);
                 }
             }
 
