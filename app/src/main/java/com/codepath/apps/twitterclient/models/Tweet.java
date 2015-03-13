@@ -102,6 +102,7 @@ public class Tweet extends Model implements Serializable {
         return new Select()
                 .from(Tweet.class)
                 .where("isMention = ?", false)
+                .orderBy("twitterId DESC")
                 .execute();
     }
 
@@ -109,6 +110,7 @@ public class Tweet extends Model implements Serializable {
         return new Select()
                 .from(Tweet.class)
                 .where("isMention = ?", true)
+                .orderBy("twitterId DESC")
                 .execute();
     }
 
