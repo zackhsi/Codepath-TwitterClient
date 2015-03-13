@@ -42,7 +42,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
 
-                List<Tweet> tweets = Tweet.fromJSONArray(response);
+                List<Tweet> tweets = Tweet.fromJSONArray(response, false);
                 if (option == PopulateOption.POPULATE_TOP) {
                     add(0, tweets);
                 } else if (option == PopulateOption.POPULATE_BOTTOM) {

@@ -41,7 +41,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
 
-                List<Tweet> tweets = Tweet.fromJSONArray(response);
+                List<Tweet> tweets = Tweet.fromJSONArray(response, true);
                 if (option == PopulateOption.POPULATE_TOP) {
                     add(0, tweets);
                 } else if (option == PopulateOption.POPULATE_BOTTOM) {

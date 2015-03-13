@@ -64,7 +64,7 @@ public class ComposeActivity extends ActionBarActivity {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Log.d("DEBUG", response.toString());
-                    Tweet tweet = Tweet.fromJSON(response);
+                    Tweet tweet = Tweet.fromJSON(response, false);
                     Intent i = new Intent();
                     i.putExtra("tweet", tweet);
                     setResult(RESULT_OK, i);
