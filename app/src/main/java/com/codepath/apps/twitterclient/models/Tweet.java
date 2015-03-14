@@ -144,7 +144,7 @@ public class Tweet extends Model implements Serializable {
     public static List<Tweet> getUserTimeline(String screenName) {
         return new Select()
                 .from(Tweet.class)
-                .where("screenName = ?", "zackhsi")
+                .where("screenName = ?", screenName)
                 .orderBy("twitterId DESC")
                 .execute();
     }

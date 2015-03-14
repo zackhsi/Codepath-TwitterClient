@@ -5,21 +5,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.codepath.apps.twitterclient.R;
-import com.codepath.apps.twitterclient.TwitterApplication;
-import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterclient.models.User;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONObject;
 
 
 public class ProfileActivity extends ActionBarActivity {
-    TwitterClient client;
     User user;
 
     @Override
@@ -27,27 +19,11 @@ public class ProfileActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        client = TwitterApplication.getRestClient();
-        client.getUserInfo("zackhsi", new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = User.fromJSON(response);
-                getSupportActionBar().setTitle("@" + user.getScreenName());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-
-                Toast.makeText(ProfileActivity.this, "Failed getting user info", Toast.LENGTH_LONG).show();
-            }
-
-
-        });
+        user = (User) getIntent().getSerializableExtra("user");
+        getSupportActionBar().setTitle("@" + user.getScreenName());
 
         if (savedInstanceState == null) {
-            String screenName = getIntent().getStringExtra("screenName");
-            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
+            UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName());
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContainer, fragmentUserTimeline);
