@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterclient.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -12,18 +13,30 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewParent;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.restclienttemplate.ProfileActivity;
 import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.TwitterApplication;
+import com.codepath.apps.twitterclient.TwitterClient;
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;
+import com.codepath.apps.twitterclient.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 public class TimelineActivity extends ActionBarActivity {
+    TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        client = TwitterApplication.getRestClient();
 
         setupViews();
 
@@ -64,7 +77,7 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
-        private String[] tabTitles = { "Home", "Mentions" };
+        private String[] tabTitles = {"Home", "Mentions"};
 
         public TweetsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -89,5 +102,26 @@ public class TimelineActivity extends ActionBarActivity {
         public int getCount() {
             return tabTitles.length;
         }
+    }
+
+    public void onProfileView(MenuItem mi) {
+        client.getUserInfo(getIntent().getStringExtra("screenName"), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
+                User user = User.fromJSON(response);
+                i.putExtra("user", user);
+                startActivity(i);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+
+                Toast.makeText(TimelineActivity.this, "Failed getting user info", Toast.LENGTH_LONG).show();
+            }
+
+
+        });
     }
 }

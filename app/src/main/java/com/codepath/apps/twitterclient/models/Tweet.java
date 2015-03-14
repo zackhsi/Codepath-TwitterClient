@@ -33,6 +33,9 @@ public class Tweet extends Model implements Serializable {
     @Column(name = "text")
     private String text;
 
+    @Column(name = "screenName")
+    private String screenName;
+
     @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
 
@@ -72,11 +75,13 @@ public class Tweet extends Model implements Serializable {
     public static Tweet fromJSON(JSONObject jsonObject, Boolean isMention) {
         Tweet tweet = new Tweet();
         try {
+            tweet.isMention = isMention;
             tweet.twitterId = jsonObject.getLong("id");
             tweet.setCreatedAtFromString(jsonObject.getString("created_at"));
             tweet.text = jsonObject.getString("text");
-            tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
-            tweet.isMention = isMention;
+            User user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.user = user;
+            tweet.screenName = user.getScreenName();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -134,5 +139,13 @@ public class Tweet extends Model implements Serializable {
             return null;
         }
         return tweet.getTwitterId();
+    }
+
+    public static List<Tweet> getUserTimeline(String screenName) {
+        return new Select()
+                .from(Tweet.class)
+                .where("screenName = ?", screenName)
+                .orderBy("twitterId DESC")
+                .execute();
     }
 }
