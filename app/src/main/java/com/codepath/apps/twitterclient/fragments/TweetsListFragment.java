@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.R;
@@ -69,6 +70,25 @@ public class TweetsListFragment extends Fragment {
         });
 
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
+        setupTweetsListView();
+
+        pullToRefreshView = (PullToRefreshView) v.findViewById(R.id.pull_to_refresh);
+        pullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline(PopulateOption.POPULATE_TOP);
+                pullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pullToRefreshView.setRefreshing(false);
+                    }
+                }, 1);
+            }
+        });
+        return v;
+    }
+
+    private void setupTweetsListView() {
         lvTweets.setAdapter(aTweets);
 
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
@@ -90,21 +110,6 @@ public class TweetsListFragment extends Fragment {
             }
 
         });
-
-        pullToRefreshView = (PullToRefreshView) v.findViewById(R.id.pull_to_refresh);
-        pullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateTimeline(PopulateOption.POPULATE_TOP);
-                pullToRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        pullToRefreshView.setRefreshing(false);
-                    }
-                }, 1);
-            }
-        });
-        return v;
     }
 
     protected void populateTimeline(PopulateOption option) {}

@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterclient.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.ProfileActivity;
 import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.activities.TimelineActivity;
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.codepath.apps.twitterclient.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
@@ -26,13 +31,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Tweet tweet = getItem(position);
+        final Tweet tweet = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
         }
 
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+        final ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUser = (TextView) convertView.findViewById(R.id.tvUser);
         TextView tvText = (TextView) convertView.findViewById(R.id.tvText);
         TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
@@ -47,6 +52,15 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         if (tweet.getUser() != null) {
             Picasso.with(getContext()).load(tweet.getUser().getProfileImageURL()).into(ivProfileImage);
         }
+
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("user", tweet.getUser());
+                getContext().startActivity(i);
+            }
+        });
 
         return convertView;
     }
