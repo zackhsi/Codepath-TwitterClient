@@ -127,19 +127,14 @@ public class TweetsListFragment extends Fragment {
 
     protected void populateTimeline(final PopulateOption option) {
         // TODO: get minId and maxId per timeline
-        Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? Tweet.getMinId() : Tweet.getMaxId();
+        Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? getMinId() : getMaxId();
 
         getMoreTweets(option, tweetId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
-
-                List<Tweet> tweets = Tweet.fromJSONArray(response, false);
-                if (option == PopulateOption.POPULATE_TOP) {
-                    addAll(0, tweets);
-                } else if (option == PopulateOption.POPULATE_BOTTOM) {
-                    addAll(tweets);
-                }
+                List<Tweet> tweets = Tweet.fromJSONArray(response, isMention());
+                refreshTweets();
             }
 
             @Override
@@ -147,6 +142,20 @@ public class TweetsListFragment extends Fragment {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    protected Long getMinId() {
+        // Subclasses override this
+        return null;
+    }
+
+    protected Long getMaxId() {
+        // Subclasses override this
+        return null;
+    }
+
+    protected Boolean isMention() {
+        return false;
     }
 
     protected void getMoreTweets(TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
