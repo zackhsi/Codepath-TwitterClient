@@ -27,12 +27,17 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     }
 
     @Override
+    protected Boolean isMention() {
+        return true;
+    }
+
+    @Override
     protected List<Tweet> getTweetsFromDatabase() {
         return Tweet.getMentions();
     }
 
     @Override
     protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
-        client.getHomeTimeline(option, tweetId, handler);
+        client.getMentionsTimeline(option, tweetId, handler);
     }
 }

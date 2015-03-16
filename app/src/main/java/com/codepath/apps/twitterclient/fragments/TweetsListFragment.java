@@ -133,13 +133,8 @@ public class TweetsListFragment extends Fragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
-
-                List<Tweet> tweets = Tweet.fromJSONArray(response, false);
-                if (option == PopulateOption.POPULATE_TOP) {
-                    addAll(0, tweets);
-                } else if (option == PopulateOption.POPULATE_BOTTOM) {
-                    addAll(tweets);
-                }
+                List<Tweet> tweets = Tweet.fromJSONArray(response, isMention());
+                refreshTweets();
             }
 
             @Override
@@ -147,6 +142,10 @@ public class TweetsListFragment extends Fragment {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    protected Boolean isMention() {
+        return false;
     }
 
     protected void getMoreTweets(TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
