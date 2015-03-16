@@ -40,4 +40,14 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         client.getMentionsTimeline(option, tweetId, handler);
     }
+
+    @Override
+    protected Long getMinId() {
+        return Tweet.getMinMentionId();
+    }
+
+    @Override
+    protected Long getMaxId() {
+        return Tweet.getMaxMentionId();
+    }
 }

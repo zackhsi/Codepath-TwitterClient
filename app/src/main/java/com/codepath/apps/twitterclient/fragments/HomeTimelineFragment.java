@@ -36,4 +36,14 @@ public class HomeTimelineFragment extends TweetsListFragment {
     protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         client.getHomeTimeline(option, tweetId, handler);
     }
+
+    @Override
+    protected Long getMinId() {
+        return Tweet.getMinHomeId();
+    }
+
+    @Override
+    protected Long getMaxId() {
+        return Tweet.getMaxHomeId();
+    }
 }

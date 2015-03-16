@@ -119,9 +119,10 @@ public class Tweet extends Model implements Serializable {
                 .execute();
     }
 
-    public static Long getMinId() {
+    public static Long getMinHomeId() {
         Tweet tweet = new Select()
                 .from(Tweet.class)
+                .where("isMention = ?", false)
                 .orderBy("twitterId ASC")
                 .executeSingle();
         if (tweet == null) {
@@ -130,9 +131,58 @@ public class Tweet extends Model implements Serializable {
         return tweet.getTwitterId();
     }
 
-    public static Long getMaxId() {
+    public static Long getMaxHomeId() {
         Tweet tweet = new Select()
                 .from(Tweet.class)
+                .where("isMention = ?", false)
+                .orderBy("twitterId DESC")
+                .executeSingle();
+        if (tweet == null) {
+            return null;
+        }
+        return tweet.getTwitterId();
+    }
+
+    public static Long getMinMentionId() {
+        Tweet tweet = new Select()
+                .from(Tweet.class)
+                .where("isMention = ?", true)
+                .orderBy("twitterId ASC")
+                .executeSingle();
+        if (tweet == null) {
+            return null;
+        }
+        return tweet.getTwitterId();
+    }
+
+    public static Long getMaxMentionId() {
+        Tweet tweet = new Select()
+                .from(Tweet.class)
+                .where("isMention = ?", true)
+                .orderBy("twitterId DESC")
+                .executeSingle();
+        if (tweet == null) {
+            return null;
+        }
+        return tweet.getTwitterId();
+    }
+
+    public static Long getMinUserId(String screenName) {
+        Tweet tweet = new Select()
+                .from(Tweet.class)
+                .where("screenName = ?", screenName)
+                .orderBy("twitterId ASC")
+                .executeSingle();
+        if (tweet == null) {
+            return null;
+        }
+        return tweet.getTwitterId();
+    }
+
+    public static Long getMaxUserId(String screenName) {
+        Tweet tweet = new Select()
+                .from(Tweet.class)
+                .where("screenName = ?", screenName)
                 .orderBy("twitterId DESC")
                 .executeSingle();
         if (tweet == null) {

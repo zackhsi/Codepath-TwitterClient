@@ -41,4 +41,14 @@ public class UserTimelineFragment extends TweetsListFragment {
     protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         client.getUserTimeline(getArguments().getString("screenName"), option, tweetId, handler);
     }
+
+    @Override
+    protected Long getMinId() {
+        return Tweet.getMinUserId(getArguments().getString("screenName"));
+    }
+
+    @Override
+    protected Long getMaxId() {
+        return Tweet.getMaxUserId(getArguments().getString("screenName"));
+    }
 }
