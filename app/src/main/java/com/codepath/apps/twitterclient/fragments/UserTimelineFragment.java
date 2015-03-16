@@ -31,8 +31,9 @@ public class UserTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void refreshTweets() {
-        tweets = new ArrayList<>(Tweet.getUserTimeline(getArguments().getString("screenName")));
+    @Override
+    protected List<Tweet> getTweets() {
+        return Tweet.getUserTimeline(getArguments().getString("screenName"));
     }
 
     protected void populateTimeline(final PopulateOption option) {

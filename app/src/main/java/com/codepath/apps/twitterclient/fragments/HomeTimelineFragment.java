@@ -26,8 +26,9 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
     }
 
-    protected void refreshTweets() {
-        tweets = new ArrayList<>(Tweet.getHome());
+    @Override
+    protected List<Tweet> getTweets() {
+        return Tweet.getHome();
     }
 
     protected void populateTimeline(final PopulateOption option) {
