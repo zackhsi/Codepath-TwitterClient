@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,16 @@ import com.codepath.apps.twitterclient.activities.ComposeActivity;
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.helpers.EndlessScrollListener;
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.melnykov.fab.FloatingActionButton;
 import com.yalantis.pulltorefresh.library.PullToRefreshView;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,7 +128,34 @@ public class TweetsListFragment extends Fragment {
         });
     }
 
-    protected void populateTimeline(PopulateOption option) {}
+    protected void populateTimeline(final PopulateOption option) {
+        // TODO: get minId and maxId per timeline
+        Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? Tweet.getMinId() : Tweet.getMaxId();
+
+        getTimeline(option, tweetId, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG", response.toString());
+
+                List<Tweet> tweets = Tweet.fromJSONArray(response, false);
+                if (option == PopulateOption.POPULATE_TOP) {
+                    addAll(0, tweets);
+                } else if (option == PopulateOption.POPULATE_BOTTOM) {
+                    addAll(tweets);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+    }
+
+    protected void getTimeline(TweetsListFragment.PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
+        // Subclasses override this to get relevant tweets
+        return;
+    }
 
 
     @Override
