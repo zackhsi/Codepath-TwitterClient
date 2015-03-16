@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.codepath.apps.restclienttemplate.ProfileActivity">
 
     <RelativeLayout
@@ -13,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:id="@+id/rlUserHeader">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ivProfileImage"
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Name"
+            android:textColor="@color/black"
             android:id="@+id/tvName"
             android:layout_alignTop="@id/ivProfileImage"
             android:layout_toRightOf="@+id/ivProfileImage"
@@ -70,6 +72,17 @@
             />
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llCounts"
+        android:orientation="horizontal"
+        android:minHeight="1dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/llDivider"
+        android:background="@color/orange"
+        ></LinearLayout>
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -78,6 +91,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/llCounts"
+        android:layout_below="@+id/llDivider"
         android:id="@+id/flContainer"></FrameLayout>
 </RelativeLayout>

@@ -48,6 +48,9 @@ public class TimelineActivity extends ActionBarActivity {
         vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabStrip.setViewPager(vpPager);
+        tabStrip.setIndicatorColorResource(R.color.primary);
+        tabStrip.setDividerColorResource(R.color.black);
+        tabStrip.setUnderlineColorResource(R.color.orange);
     }
 
     private void setupViews() {
