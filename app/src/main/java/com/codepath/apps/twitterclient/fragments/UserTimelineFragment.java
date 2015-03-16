@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -31,31 +32,13 @@ public class UserTimelineFragment extends TweetsListFragment {
         return fragment;
     }
 
-    protected void refreshTweets() {
-        tweets = new ArrayList<>(Tweet.getUserTimeline(getArguments().getString("screenName")));
+    @Override
+    protected List<Tweet> getTweetsFromDatabase() {
+        return Tweet.getUserTimeline(getArguments().getString("screenName"));
     }
 
-    protected void populateTimeline(final PopulateOption option) {
-        Long tweetId = option == PopulateOption.POPULATE_BOTTOM ? Tweet.getMinId() : Tweet.getMaxId();
-        String screenName = getArguments().getString("screenName");
-
-        client.getUserTimeline(screenName, option, tweetId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("DEBUG", response.toString());
-
-                List<Tweet> tweets = Tweet.fromJSONArray(response, true);
-                if (option == PopulateOption.POPULATE_TOP) {
-                    addAll(0, tweets);
-                } else if (option == PopulateOption.POPULATE_BOTTOM) {
-                    addAll(tweets);
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        });
+    @Override
+    protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
+        client.getHomeTimeline(option, tweetId, handler);
     }
 }
