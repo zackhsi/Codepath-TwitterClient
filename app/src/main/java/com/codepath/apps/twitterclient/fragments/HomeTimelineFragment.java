@@ -28,12 +28,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
     @Override
-    protected List<Tweet> getTweets() {
+    protected List<Tweet> getTweetsFromDatabase() {
         return Tweet.getHome();
     }
 
     @Override
-    protected void getTimeline(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
+    protected void getMoreTweets(PopulateOption option, Long tweetId, AsyncHttpResponseHandler handler) {
         client.getHomeTimeline(option, tweetId, handler);
     }
 }
